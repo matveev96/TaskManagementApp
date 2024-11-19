@@ -28,9 +28,6 @@ export const Todolist = ({
         changeFilter(value)
     }
 
-    const removeTaskHandler = (taskId: string) => {
-        removeTask(taskId)
-    }
 
     const addTaskHandler = () => {
         addTask(newTitle);
@@ -45,6 +42,20 @@ export const Todolist = ({
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => setNewTitle(e.currentTarget.value)
 
+    const mappedTasks = tasks.map(task => {
+        const removeTaskHandler = () => {
+            removeTask(task.id)
+        }
+        return (
+                <li key={task.id}>
+                    <input type="checkbox" checked={task.isDone}/>
+                    <span>{task.title}</span>
+                    <Button title={"X"} onClick={removeTaskHandler}/>
+                </li>
+            )
+        })
+
+
     return (
         <div>
             <h3>{title}</h3>
@@ -54,30 +65,19 @@ export const Todolist = ({
                     onChange={onChangeHandler}
                     onKeyDown={onKeyDownHandler}
                 />
-                <button onClick={addTaskHandler}>+</button>
+                <Button title={'+'} onClick={addTaskHandler}/>
                 {/*<Button title={'+'}/>*/}
             </div>
+
             {
                 tasks.length === 0
                     ? <p>Тасок нет</p>
-                    : <ul>
-                        {tasks.map(task => {
-                            return (
-                                <li key={task.id}>
-                                    <input type="checkbox" checked={task.isDone}/>
-                                    <span>{task.title}</span>
-                                    <button onClick={() => removeTaskHandler(task.id)}>X</button>
-                                </li>
-                            )
-                        })}
-                    </ul>
+                    : <ul>{mappedTasks}</ul>
             }
             <div>
-                <button onClick={() => changeFilterHandler('all')}>All</button>
-                <button onClick={() => changeFilterHandler('active')}>Active</button>
-                <button onClick={() => changeFilterHandler('completed')}>Completed</button>
-                {/*<button onClick={changeFilterCompletedHandler}>Completed</button>*/}
-                {/*<button onClick={() => changeFilter('completed')}>Completed</button>*/}
+                <Button title={'All'} onClick={() => changeFilterHandler('all')}/>
+                <Button title={'Active'} onClick={() => changeFilterHandler('active')}/>
+                <Button title={'Completed'} onClick={() => changeFilterHandler('completed')}/>
             </div>
         </div>
     )
