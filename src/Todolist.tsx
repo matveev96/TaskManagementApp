@@ -1,6 +1,7 @@
 import {FilterValuesType, TaskType} from "./App";
 import {Button} from "./Button";
 import {useRef, KeyboardEvent, useState, ChangeEvent} from "react";
+import {useAutoAnimate} from "@formkit/auto-animate/react";
 
 type PropsType = {
     title: string
@@ -19,6 +20,7 @@ export const Todolist = ({
                          }: PropsType) => {
 
     const [newTitle, setNewTitle] = useState("");
+    const [listRef] = useAutoAnimate<HTMLUListElement>()
 
     // const changeFilterAllHandler = () => changeFilter('all')
     // const changeFilterActiveHandler = () => changeFilter('active')
@@ -72,7 +74,7 @@ export const Todolist = ({
             {
                 tasks.length === 0
                     ? <p>Тасок нет</p>
-                    : <ul>{mappedTasks}</ul>
+                    : <ul ref={listRef}>{mappedTasks}</ul>
             }
             <div>
                 <Button title={'All'} onClick={() => changeFilterHandler('all')}/>
