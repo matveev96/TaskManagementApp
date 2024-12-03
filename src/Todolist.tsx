@@ -12,7 +12,8 @@ type PropsType = {
     changeIsDone: (taskId: string, isDone: boolean) => void
 }
 
-export const Todolist = ({title, tasks, removeTask, changeFilter, addTask, changeIsDone}: PropsType) => {
+export const Todolist = (props: PropsType) => {
+    const {title, tasks, removeTask, changeFilter, addTask, changeIsDone} = props
     const [listRef] = useAutoAnimate<HTMLUListElement>()
 
     const [taskTitle, setTaskTitle] = useState('')
