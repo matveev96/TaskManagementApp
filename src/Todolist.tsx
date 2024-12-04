@@ -62,17 +62,14 @@ export const Todolist = (props: PropsType) => {
         removeToDoList(todolistId)
     }
 
-    const changeFilterTodolistHandler = () => {
-        let tasksForTodolist = tasks[todolistId]
-        if (filter === 'active') {
-            tasksForTodolist = tasks[todolistId].filter(task => !task.isDone)
+    const filterOfTasks = () => {
+        switch (filter) {
+            case "active": return tasks[todolistId].filter(task => !task.isDone);
+            case "completed": return tasks[todolistId].filter(task => task.isDone);
+            default: return tasks[todolistId]
         }
-        if (filter === 'completed') {
-            tasksForTodolist = tasks[todolistId].filter(task => task.isDone)
-        }
-        return tasksForTodolist
     }
-    const tasksForTodolist = changeFilterTodolistHandler()
+    const tasksForTodolist = filterOfTasks()
 
     return (
         <div>
