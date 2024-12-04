@@ -8,17 +8,17 @@
 }
 
 .error {
-  border: 3px solid red;
+  border: red 1px solid;
 }
 
-.errorMessage {
+.error-message {
   color: red;
 }
 
-.activeFilter {
+.active-filter {
   background-color: lightgreen;
 }
 
-.isDone {
+.is-done {
   opacity: 0.5;
 }
