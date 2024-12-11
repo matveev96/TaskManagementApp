@@ -1,7 +1,8 @@
 import {FilterValuesType, TasksType} from "./App";
-import {ChangeEvent, KeyboardEvent, useState} from "react";
+import {ChangeEvent} from "react";
 import {Button} from "./Button";
 import {useAutoAnimate} from "@formkit/auto-animate/react";
+import {AddItemForm} from "./AddItemForm";
 
 
 type PropsType = {
@@ -29,30 +30,8 @@ export const Todolist = (props: PropsType) => {
         removeToDoList,
     } = props
 
-    const [taskTitle, setTaskTitle] = useState('')
-    const [error, setError] = useState<string | null>(null)
     const [listRef] = useAutoAnimate<HTMLUListElement>()
 
-
-    const addTaskHandler = () => {
-        if (taskTitle.trim() !== '') {
-            addTask(todolistId, taskTitle.trim())
-            setTaskTitle('')
-        } else {
-            setError('Title is required')
-        }
-    }
-
-    const changeTaskTitleHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        setTaskTitle(event.currentTarget.value)
-    }
-
-    const addTaskOnKeyUpHandler = (event: KeyboardEvent<HTMLInputElement>) => {
-        setError(null)
-        if (event.key === 'Enter') {
-            addTaskHandler()
-        }
-    }
 
     const changeFilterTasksHandler = (filter: FilterValuesType) => {
         changeFilter(todolistId, filter)
@@ -71,22 +50,17 @@ export const Todolist = (props: PropsType) => {
     }
     const tasksForTodolist = filterOfTasks()
 
+    const addTaskHandler = (title: string) => {
+        addTask(todolistId, title)
+    }
+
     return (
         <div>
             <h3>
                 {title}
                 <Button title={'x'} onClick={removeToDoListHandler}/>
             </h3>
-            <div>
-                <input
-                    className={error ? 'error' : ''}
-                    value={taskTitle}
-                    onChange={changeTaskTitleHandler}
-                    onKeyUp={addTaskOnKeyUpHandler}
-                />
-                <Button title={'+'} onClick={addTaskHandler}/>
-                {error && <div className={'error-message'}>{error}</div>}
-            </div>
+            <AddItemForm addItem={addTaskHandler}/>
             {
                 tasksForTodolist.length === 0
                     ? <p>Тасок нет</p>
@@ -121,69 +95,3 @@ export const Todolist = (props: PropsType) => {
         </div>
     )
 }
-
-
-
-//--------------------------------------------------------------------------------------Способ с использованием useRef
-//
-// import {FilterValuesType, TaskType} from "./App";
-// import {Button} from "./Button";
-// import {useRef} from "react";
-//
-// type PropsType = {
-//     title: string
-//     tasks: TaskType[]
-//     removeTask: (taskId: string) => void
-//     changeFilter: (filter: FilterValuesType) => void
-//     addTask: (newTitle:string) => void
-// }
-//
-// export const Todolist = ({
-//                              title,
-//                              tasks,
-//                              removeTask,
-//                              changeFilter,
-//                              addTask
-//                          }: PropsType) => {
-//
-//
-//
-//     const inputRef=useRef<HTMLInputElement>(null);
-//     console.log(inputRef)
-//
-//
-//     return (
-//         <div>
-//             <h3>{title}</h3>
-//             <div>
-//                 <input ref={inputRef}/>
-//                 <button onClick={()=>{
-//                     if(inputRef.current){
-//                         addTask(inputRef.current.value)
-//                         inputRef.current.value=''
-//                     }}}>+</button>
-//                 {/*<Button title={'+'}/>*/}
-//             </div>
-//             {
-//                 tasks.length === 0
-//                     ? <p>Тасок нет</p>
-//                     : <ul>
-//                         {tasks.map(task => {
-//                             return (
-//                                 <li key={task.id}>
-//                                     <input type="checkbox" checked={task.isDone}/>
-//                                     <span>{task.title}</span>
-//                                     <Button title={'x'} onClick={() => removeTask(task.id)}/>
-//                                 </li>
-//                             )
-//                         })}
-//                     </ul>
-//             }
-//             <div>
-//                 <Button title={'All'} onClick={() => changeFilter('all')}/>
-//                 <Button title={'Active'} onClick={() => changeFilter('active')}/>
-//                 <Button title={'Completed'} onClick={() => changeFilter('completed')}/>
-//             </div>
-//         </div>
-//     )
-// }
