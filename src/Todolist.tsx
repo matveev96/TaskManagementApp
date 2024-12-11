@@ -3,6 +3,7 @@ import {ChangeEvent} from "react";
 import {Button} from "./Button";
 import {useAutoAnimate} from "@formkit/auto-animate/react";
 import {AddItemForm} from "./AddItemForm";
+import {EditableSpan} from "./EditableSpan";
 
 
 type PropsType = {
@@ -15,6 +16,8 @@ type PropsType = {
     addTask: (todolistId: string, title: string) => void
     changeTaskStatus: (todolistId: string, taskId: string, taskStatus: boolean) => void
     removeToDoList: (todolistId: string) => void
+    updateTaskTitle: (todolistId: string, taskId: string, updatedTitle: string) => void
+    updateTodoListTitle: (todolistId: string,  updatedTitle: string) => void
 }
 
 export const Todolist = (props: PropsType) => {
@@ -28,6 +31,8 @@ export const Todolist = (props: PropsType) => {
         addTask,
         changeTaskStatus,
         removeToDoList,
+        updateTaskTitle,
+        updateTodoListTitle
     } = props
 
     const [listRef] = useAutoAnimate<HTMLUListElement>()
@@ -54,10 +59,18 @@ export const Todolist = (props: PropsType) => {
         addTask(todolistId, title)
     }
 
+    const updateTodoListTitleHandler = (updateTitle: string) => {
+        updateTodoListTitle(todolistId, updateTitle)
+    }
+
+    const updateTaskTitleHandler = (updateTitle: string, taskId: string) => {
+        updateTaskTitle(todolistId, taskId, updateTitle)
+    }
+
     return (
         <div>
             <h3>
-                {title}
+                <EditableSpan oldTitle={title} onClick={updateTodoListTitleHandler}/>
                 <Button title={'x'} onClick={removeToDoListHandler}/>
             </h3>
             <AddItemForm addItem={addTaskHandler}/>
@@ -78,7 +91,7 @@ export const Todolist = (props: PropsType) => {
 
                             return <li key={task.id} className={task.isDone ? 'is-done' : ''}>
                                 <input type="checkbox" checked={task.isDone} onChange={changeTaskStatusHandler}/>
-                                <span>{task.title}</span>
+                                <EditableSpan oldTitle={task.title} onClick={(updateTitle: string) => updateTaskTitleHandler(updateTitle, task.id)}/>
                                 <Button onClick={removeTaskHandler} title={'x'}/>
                             </li>
                         })}
