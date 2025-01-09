@@ -1,21 +1,14 @@
 import { v1 } from "uuid";
-import {TasksType, TaskType} from "../App";
+import {TasksType} from "../app/App";
 import {addTodolistAC, removeTodolistAC} from "./todolists-reducer";
 
-type AddTaskAT = ReturnType<typeof AddTaskAC>
-type RemoveTaskAT = ReturnType<typeof RemoveTaskAC>
-type ChangeTaskStatusAT = ReturnType<typeof ChangeTaskStatusAC>
-type ChangeTaskTitleAT = ReturnType<typeof ChangeTaskTitleAC>
-type addTodolistAT = ReturnType<typeof addTodolistAC>
-type removeTodolistAT = ReturnType<typeof removeTodolistAC>
-type ActionType = AddTaskAT | RemoveTaskAT | ChangeTaskStatusAT | ChangeTaskTitleAT | addTodolistAT | removeTodolistAT;
+const initialState: TasksType = {}
 
-
-export const tasksReducer = (tasks: TasksType, action: ActionType): TasksType => {
+export const tasksReducer = (tasks: TasksType = initialState, action: ActionType): TasksType => {
     switch (action.type) {
         case "ADD-TASK": {
             const {title, todolistId} = action.payload
-            const newTask: TaskType = {
+            const newTask = {
                 id: v1(),
                 title: title,
                 isDone: false
@@ -74,3 +67,17 @@ export const ChangeTaskTitleAC = (payload: { title: string, todolistId: string, 
         payload: payload
     } as const
 }
+
+type AddTaskAT = ReturnType<typeof AddTaskAC>
+type RemoveTaskAT = ReturnType<typeof RemoveTaskAC>
+type ChangeTaskStatusAT = ReturnType<typeof ChangeTaskStatusAC>
+type ChangeTaskTitleAT = ReturnType<typeof ChangeTaskTitleAC>
+type addTodolistAT = ReturnType<typeof addTodolistAC>
+type removeTodolistAT = ReturnType<typeof removeTodolistAC>
+type ActionType =
+    AddTaskAT
+    | RemoveTaskAT
+    | ChangeTaskStatusAT
+    | ChangeTaskTitleAT
+    | addTodolistAT
+    | removeTodolistAT;
