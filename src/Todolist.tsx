@@ -1,4 +1,4 @@
-import {FilterValuesType, TasksType} from "./App";
+import {FilterValuesType, TasksType} from "./app/App";
 import {ChangeEvent} from "react";
 
 import {useAutoAnimate} from "@formkit/auto-animate/react";
