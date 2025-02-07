@@ -6,9 +6,10 @@ import {MenuButton} from "../MenuButton/MenuButton";
 import Switch from "@mui/material/Switch";
 import AppBar from "@mui/material/AppBar";
 import {changeThemeAC} from "../../../app/app-reducer";
-import {useAppDispatch, useAppSelector} from "../../../app/hooks";
+import {useAppSelector} from "../../hooks/useAppSelector";
 import {selectTheme} from "../../../app/app-selectors";
 import {getTheme} from "../../theme/theme";
+import {useAppDispatch} from "../../hooks/useAppDispatch";
 
 
 export const Header = () => {
