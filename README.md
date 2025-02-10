@@ -8,6 +8,7 @@
 - REST-API
 - Axios
 - MaterialUI
+- Jest
 
 ### Deploy link:
 
