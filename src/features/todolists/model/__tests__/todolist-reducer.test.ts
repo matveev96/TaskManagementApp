@@ -3,67 +3,73 @@ import {
     changeTodolistFilterAC,
     changeTodolistTitleAC,
     removeTodolistAC,
-    todolistsReducer, TodolistType
+    todolistsReducer, DomainTodolist
 } from '../todolists-reducer'
+
 import { v1 } from 'uuid'
+import type {Todolist} from "../../api/todolistsApi.types";
 
 
-test('correct Todolist should be removed', () => {
-    let todolistId1 = v1()
-    let todolistId2 = v1()
+describe('TodolistReducer tests', () => {
 
-    const startState: TodolistType[] = [
-        { id: todolistId1, title: 'What to learn', filter: 'all' },
-        { id: todolistId2, title: 'What to buy', filter: 'all' },
-    ]
+    let startState: DomainTodolist[];
+    let todolist: Todolist
+    beforeEach(() => {
 
-    const endState = todolistsReducer(startState, removeTodolistAC(todolistId1))
+        startState = [
+            {
+                id: 'todolistId1',
+                title: 'What to learn',
+                filter: 'all',
+                addedDate: '',
+                order: 1
+            },
+            {
+                id: 'todolistId2',
+                title: 'What to buy',
+                filter: 'all',
+                addedDate: '',
+                order: 1
+            }
+        ];
 
-    expect(endState.length).toBe(1)
-    expect(endState[0].id).toBe(todolistId2)
-})
+        todolist = {
+            id: 'todolistId3',
+            title: 'New Todolist',
+            addedDate: '',
+            order: 1
+        }
+    })
 
-test('correct Todolist should add Todolist', () => {
-    let todolistId1 = v1()
-    let todolistId2 = v1()
+    test('correct Todolist should be removed', () => {
 
-    const startState: TodolistType[] = [
-        { id: todolistId1, title: 'What to learn', filter: 'all' },
-        { id: todolistId2, title: 'What to buy', filter: 'all' },
-    ]
+        const endState = todolistsReducer(startState, removeTodolistAC('todolistId1'))
 
-    const endState = todolistsReducer(startState, addTodolistAC('New Todolist'))
+        expect(endState.length).toBe(1)
+        expect(endState[0].id).toBe('todolistId2')
+    })
 
-    expect(endState.length).toBe(3)
-    expect(endState[2].title).toBe('New Todolist')
-})
+    test('correct Todolist should add Todolist', () => {
 
-test('correct Todolist should change its name', () => {
-    let todolistId1 = v1()
-    let todolistId2 = v1()
+        const endState = todolistsReducer(startState, addTodolistAC(todolist))
 
-    const startState: TodolistType[] = [
-        { id: todolistId1, title: 'What to learn', filter: 'all' },
-        { id: todolistId2, title: 'What to buy', filter: 'all' },
-    ]
-const newTitle = 'New Todolist'
-    const endState = todolistsReducer(startState, changeTodolistTitleAC({ title:newTitle, id:todolistId2 }))
+        expect(endState.length).toBe(3)
+        expect(endState[0].title).toBe('New Todolist')
+    })
 
-    expect(endState[0].title).toBe('What to learn')
-    expect(endState[1].title).toBe(newTitle)
-})
+    test('correct Todolist should change its name', () => {
 
-test('correct Todolist should change filter', () => {
-    let todolistId1 = v1()
-    let todolistId2 = v1()
+        const endState = todolistsReducer(startState, changeTodolistTitleAC({ title: 'New Todolist', id: 'todolistId2' }))
 
-    const startState: TodolistType[] = [
-        { id: todolistId1, title: 'What to learn', filter: 'all' },
-        { id: todolistId2, title: 'What to buy', filter: 'all' },
-    ]
+        expect(endState[0].title).toBe('What to learn')
+        expect(endState[1].title).toBe('New Todolist')
+    })
 
-    const endState = todolistsReducer(startState, changeTodolistFilterAC({id:todolistId1, filter: "active"}))
+    test('correct Todolist should change filter', () => {
 
-    expect(endState[0].filter).toBe("active")
-    expect(endState[1].filter).toBe("all")
+        const endState = todolistsReducer(startState, changeTodolistFilterAC({id: 'todolistId1', filter: "active"}))
+
+        expect(endState[0].filter).toBe("active")
+        expect(endState[1].filter).toBe("all")
+    })
 })
