@@ -1,22 +1,22 @@
-import {applyMiddleware, combineReducers, compose, legacy_createStore as createStore, type UnknownAction} from 'redux'
-import { tasksReducer } from '../features/todolists/model/tasks-reducer'
-import { todolistsReducer } from '../features/todolists/model/todolists-reducer'
-import {appReducer} from "./app-reducer";
-import {thunk, type ThunkAction, type ThunkDispatch} from "redux-thunk";
+import { applyMiddleware, combineReducers, compose, legacy_createStore as createStore, type UnknownAction } from "redux"
+import { tasksReducer } from "../features/todolists/model/tasks-reducer"
+import { todolistsReducer } from "../features/todolists/model/todolists-reducer"
+import { appReducer } from "./app-reducer"
+import { thunk, type ThunkAction, type ThunkDispatch } from "redux-thunk"
 
 // объединяя reducer-ы с помощью combineReducers,
 // мы задаём структуру нашего единственного объекта-состояния
 
 declare global {
-    interface Window {
-        __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose
-    }
+  interface Window {
+    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose
+  }
 }
 
 const rootReducer = combineReducers({
-    tasks: tasksReducer,
-    todolists: todolistsReducer,
-    app: appReducer
+  tasks: tasksReducer,
+  todolists: todolistsReducer,
+  app: appReducer,
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose

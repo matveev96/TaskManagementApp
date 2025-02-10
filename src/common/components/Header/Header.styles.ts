@@ -1,6 +1,6 @@
-import {SxProps} from "@mui/material";
+import { SxProps } from "@mui/material"
 
-export const getToolbar : SxProps = {
-    display: 'flex',
-    justifyContent: 'space-between'
+export const getToolbar: SxProps = {
+  display: "flex",
+  justifyContent: "space-between",
 }
