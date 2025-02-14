@@ -4,15 +4,18 @@ import TextField from "@mui/material/TextField"
 type EditableSpanPropsType = {
   oldTitle: string
   onClick: (updateTitle: string) => void
+  disabled?: boolean
 }
 
-export const EditableSpan = ({ oldTitle, onClick }: EditableSpanPropsType) => {
+export const EditableSpan = ({ oldTitle, onClick, disabled }: EditableSpanPropsType) => {
   const [edit, setEdit] = useState(false)
   const [updateTitle, setUpdateTitle] = useState(oldTitle)
 
   const editHandler = () => {
-    setEdit(!edit)
-    if (edit) onClick(updateTitle)
+    if (!disabled) {
+      setEdit(!edit)
+      if (edit) onClick(updateTitle)
+    }
   }
 
   const updateTitleHandler = (event: ChangeEvent<HTMLInputElement>) => {
@@ -27,6 +30,7 @@ export const EditableSpan = ({ oldTitle, onClick }: EditableSpanPropsType) => {
       helperText="Enter changes"
       onBlur={editHandler}
       onChange={updateTitleHandler}
+      disabled={disabled}
     />
   ) : (
     <span onDoubleClick={editHandler}>{oldTitle}</span>
