@@ -2,7 +2,6 @@ import { removeTaskTC, updateTaskTC } from "../../../../../model/tasks-reducer"
 import { ChangeEvent } from "react"
 import ListItem from "@mui/material/ListItem"
 import Checkbox from "@mui/material/Checkbox"
-
 import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { getListItemSx } from "./Task.styles"
@@ -10,7 +9,7 @@ import { useAppDispatch } from "common/hooks/useAppDispatch"
 import { TaskStatus } from "common/enums"
 import type { DomainTask } from "../../../../../api/tasksApi.types"
 import type { DomainTodolist } from "../../../../../model/todolists-reducer"
-import { EditableSpan } from "common/components/EditableSpan"
+import { EditableSpan } from "common/index"
 
 type Props = {
   task: DomainTask
@@ -41,11 +40,15 @@ export const Task = ({ task, todolist }: Props) => {
           color={"primary"}
           size={"small"}
           onChange={changeTaskStatusHandler}
+          disabled={todolist.entityStatus === "loading"}
         />
-        <EditableSpan oldTitle={task.title} onClick={(updateTitle: string) => changeTaskTitleHandler(updateTitle)} />
+        <EditableSpan
+          disabled={todolist.entityStatus === "loading"}
+          oldTitle={task.title}
+          onClick={(updateTitle: string) => changeTaskTitleHandler(updateTitle)}
+        />
       </div>
-
-      <IconButton onClick={removeTaskHandler}>
+      <IconButton disabled={todolist.entityStatus === "loading"} onClick={removeTaskHandler}>
         <DeleteIcon fontSize="small" />
       </IconButton>
     </ListItem>
