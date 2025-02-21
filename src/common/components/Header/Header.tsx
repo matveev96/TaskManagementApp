@@ -11,6 +11,8 @@ import { getTheme } from "common/theme"
 import { useAppDispatch } from "common/hooks"
 import { LinearProgress } from "@mui/material"
 import { MenuButton } from "common/index"
+import { logoutTC } from "../../../features/auth/model/authReducer"
+import { selectIsLoggedIn } from "../../../features/auth/model/authSelectors"
 
 export const Header = () => {
   const themeMode = useAppSelector(selectTheme)
@@ -18,9 +20,16 @@ export const Header = () => {
   const dispatch = useAppDispatch()
   const theme = getTheme(themeMode)
 
+  const isLoggedIn = useAppSelector(selectIsLoggedIn)
+
   const changeModeHandler = () => {
     dispatch(changeThemeAC(themeMode === "light" ? "dark" : "light"))
   }
+
+  const logoutHandler = () => {
+    dispatch(logoutTC())
+  }
+
   return (
     <AppBar position="static" sx={{ mb: "30px" }}>
       <Toolbar sx={getToolbar}>
@@ -28,8 +37,7 @@ export const Header = () => {
           <MenuIcon />
         </IconButton>
         <div>
-          <MenuButton>Login</MenuButton>
-          <MenuButton>Logout</MenuButton>
+          {isLoggedIn && <MenuButton onClick={logoutHandler}>Logout</MenuButton>}
           <MenuButton background={theme.palette.primary.dark}>FAQ</MenuButton>
           <Switch color={"default"} onChange={changeModeHandler} />
         </div>
