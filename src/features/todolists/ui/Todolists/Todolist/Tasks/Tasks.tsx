@@ -5,9 +5,6 @@ import { useAutoAnimate } from "@formkit/auto-animate/react"
 import { DomainTodolist } from "../../../../model/todolists-reducer"
 import { Task } from "./Task"
 import { TaskStatus } from "common/enums"
-import { useAppDispatch } from "common/hooks/useAppDispatch"
-import { useEffect } from "react"
-import { fetchTasksTC } from "../../../../model/tasks-reducer"
 
 type Props = {
   todolist: DomainTodolist
@@ -17,12 +14,6 @@ export const Tasks = ({ todolist }: Props) => {
   const [listRef] = useAutoAnimate<HTMLUListElement>()
 
   const tasks = useAppSelector(selectTasks)
-
-  const dispatch = useAppDispatch()
-
-  useEffect(() => {
-    dispatch(fetchTasksTC(todolist.id))
-  }, [])
 
   const filterOfTasks = () => {
     switch (todolist.filter) {
