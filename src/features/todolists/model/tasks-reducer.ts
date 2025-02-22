@@ -4,6 +4,7 @@ import type { AppDispatch, AppThunk } from "../../../app/store"
 import {
   type AddTodolistActionType,
   changeEntityStatusTodolistAC,
+  type ClearDataActionType,
   type RemoveTodolistActionType,
 } from "./todolists-reducer"
 import { setAppStatusAC } from "../../../app/app-reducer"
@@ -26,6 +27,9 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
         ...state,
         [action.payload.todolistId]: state[action.payload.todolistId].filter((t) => t.id !== action.payload.taskId),
       }
+    }
+    case "CLEAR-DATA": {
+      return {}
     }
 
     case "ADD-TASK": {
@@ -177,6 +181,7 @@ type ActionsType =
   | RemoveTodolistActionType
   | SetTasksActionType
   | UpdateTaskActionType
+  | ClearDataActionType
 
 export type TasksStateType = {
   [key: string]: DomainTask[]
