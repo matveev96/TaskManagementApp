@@ -5,6 +5,7 @@ import { type RequestStatus, setAppStatusAC } from "../../../app/app-reducer"
 import { handleServerAppError } from "common/utils/handleServerAppError"
 import { handleServerNetworkError } from "common/utils/handleServerNetworkError"
 import { ResultCode } from "common/enums"
+import { fetchTasksTC } from "./tasks-reducer"
 
 const initialState: DomainTodolist[] = []
 
@@ -16,6 +17,10 @@ export const todolistsReducer = (state: DomainTodolist[] = initialState, action:
 
     case "REMOVE-TODOLIST": {
       return state.filter((tl) => tl.id !== action.payload.id)
+    }
+
+    case "CLEAR-DATA": {
+      return []
     }
 
     case "ADD-TODOLIST": {
@@ -46,6 +51,10 @@ export const removeTodolistAC = (id: string) => {
   return { type: "REMOVE-TODOLIST", payload: { id } } as const
 }
 
+export const clearDataAC = () => {
+  return { type: "CLEAR-DATA" } as const
+}
+
 export const addTodolistAC = (todolist: Todolist) => {
   return { type: "ADD-TODOLIST", payload: { todolist } } as const
 }
@@ -74,6 +83,12 @@ export const fetchTodolistsTC = (): AppThunk => (dispatch) => {
     .then((res) => {
       dispatch(setTodolistsAC(res.data))
       dispatch(setAppStatusAC("idle"))
+      return res.data
+    })
+    .then((todolists) => {
+      todolists.forEach((todolist) => {
+        dispatch(fetchTasksTC(todolist.id))
+      })
     })
     .catch((error) => {
       handleServerNetworkError(error, dispatch)
@@ -147,6 +162,7 @@ export type ChangeTodolistTitleActionType = ReturnType<typeof changeTodolistTitl
 export type ChangeTodolistFilterActionType = ReturnType<typeof changeTodolistFilterAC>
 export type SetTodolistsActionType = ReturnType<typeof setTodolistsAC>
 export type ChangeEntityStatusTodolistActionType = ReturnType<typeof changeEntityStatusTodolistAC>
+export type ClearDataActionType = ReturnType<typeof clearDataAC>
 
 type ActionsType =
   | RemoveTodolistActionType
@@ -155,6 +171,7 @@ type ActionsType =
   | ChangeTodolistFilterActionType
   | SetTodolistsActionType
   | ChangeEntityStatusTodolistActionType
+  | ClearDataActionType
 
 export type FilterValuesType = "all" | "active" | "completed"
 
