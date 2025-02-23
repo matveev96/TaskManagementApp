@@ -23,7 +23,7 @@ export const Main = () => {
     if (!isLoggedIn) {
       navigate(Path.Login)
     }
-  }, [isLoggedIn])
+  }, [isLoggedIn, navigate])
   // Второй вариант реализации роутинга при логинезации, который выпилили из документации ReactRouter. Для использования без ошибок нужно его вставить перед return компоненты Login
   // if(isLoggedIn) {
   //   return <Navigate to={Path.Main} />
@@ -35,7 +35,8 @@ export const Main = () => {
         <AddItemForm addItem={addTodoList} />
       </Grid>
       <Grid container spacing={4} sx={{ mt: "30px" }}>
-        <Todolists />
+        {isLoggedIn && <Todolists />}
+        {/*<Todolists />*/}
       </Grid>
     </Container>
   )
