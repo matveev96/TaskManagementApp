@@ -10,7 +10,6 @@ import { getTheme } from "common/theme"
 import { selectTheme } from "../../../../app/app-selectors"
 import Grid from "@mui/material/Grid2"
 import { type SubmitHandler, useForm, Controller } from "react-hook-form"
-import s from "./Login.module.css"
 import type { LoginArgs } from "../../api/authApi.types"
 import { loginTC } from "../../model/authReducer"
 import { selectIsLoggedIn } from "../../model/authSelectors"
@@ -22,19 +21,19 @@ export const Login = () => {
   const dispatch = useAppDispatch()
   const isLoggedIn = useAppSelector(selectIsLoggedIn)
   const navigate = useNavigate()
+  const themeMode = useAppSelector(selectTheme)
+  const theme = getTheme(themeMode)
 
   useEffect(() => {
     if (isLoggedIn) {
       navigate(Path.Main)
     }
   }, [isLoggedIn])
-  // Второй вариант реализации роутинга при логинезации, который выпилили из документации ReactRouter. Для использования без ошибок нужно его вставить перед return компоненты Login
+
+  // Второй вариант реализации роутинга при логинизации <Navigate>, который выпилили из документации ReactRouter. Для использования без ошибок нужно его вставить перед return компоненты Login
   // if(isLoggedIn) {
   //   return <Navigate to={Path.Main} />
   // }
-
-  const themeMode = useAppSelector(selectTheme)
-  const theme = getTheme(themeMode)
 
   const {
     register,
@@ -42,11 +41,13 @@ export const Login = () => {
     reset,
     control,
     formState: { errors },
-  } = useForm<LoginArgs>({ defaultValues: { email: "", password: "", rememberMe: false } })
+  } = useForm<LoginArgs>()
+  // { defaultValues: { email: "", password: "", rememberMe: false }}
 
   const onSubmit: SubmitHandler<LoginArgs> = (data) => {
     dispatch(loginTC(data))
-    reset()
+    reset({ password: "", rememberMe: false }, { keepDirty: true })
+    // { password: "", rememberMe: false }, { keepDirty: true }
   }
 
   return (
@@ -76,6 +77,8 @@ export const Login = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormGroup>
               <TextField
+                error={!!errors.email}
+                helperText={errors.email && errors.email.message}
                 label="Email"
                 margin="normal"
                 {...register("email", {
@@ -86,8 +89,20 @@ export const Login = () => {
                   },
                 })}
               />
-              {errors.email && <span className={s.errorMessage}>{errors.email.message}</span>}
-              <TextField type="password" label="Password" margin="normal" {...register("password")} />
+              <TextField
+                error={!!errors.password}
+                helperText={errors.password && errors.password.message}
+                type="password"
+                label="Password"
+                margin="normal"
+                {...register("password", {
+                  required: "password is required",
+                  minLength: {
+                    value: 3,
+                    message: "Password must be at least 3 characters long",
+                  },
+                })}
+              />
               <FormControlLabel
                 label={"Remember me"}
                 control={
