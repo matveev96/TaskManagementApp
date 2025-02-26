@@ -29,10 +29,15 @@ export const authSlice = createSlice({
       state.isInitialized = action.payload.isInitialized
     }),
   }),
+  selectors: {
+    selectIsLoggedIn: (state) => state.isLoggedIn,
+    selectIsInitialized: (state) => state.isInitialized,
+  },
 })
 
 export const authReducer = authSlice.reducer
 export const { setIsLoggedIn, setIsInitialized } = authSlice.actions
+export const { selectIsLoggedIn, selectIsInitialized } = authSlice.selectors
 
 // thunks
 export const loginTC = (data: LoginArgs) => (dispatch: AppDispatch) => {
