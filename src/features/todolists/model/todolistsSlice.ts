@@ -1,11 +1,11 @@
 import type { Todolist } from "../api/todolistsApi.types"
-import type { AppThunk } from "../../../app/store"
+import { type AppThunk } from "../../../app/store"
 import { todolistsApi } from "../api/todolistsApi"
 import { type RequestStatus, setAppStatus } from "../../../app/appSlice"
 import { handleServerAppError } from "common/utils/handleServerAppError"
 import { handleServerNetworkError } from "common/utils/handleServerNetworkError"
 import { ResultCode } from "common/enums"
-import { fetchTasksTC } from "./tasks-reducer"
+import { fetchTasksTC } from "./tasksSlice"
 import { createSlice } from "@reduxjs/toolkit"
 
 export type FilterValuesType = "all" | "active" | "completed"
@@ -55,6 +55,9 @@ export const todolistsSlice = createSlice({
       return []
     }),
   }),
+  selectors: {
+    selectTodolists: (state) => state,
+  },
 })
 
 export const todolistsReducer = todolistsSlice.reducer
@@ -67,6 +70,7 @@ export const {
   setTodolists,
   clearData,
 } = todolistsSlice.actions
+export const { selectTodolists } = todolistsSlice.selectors
 
 // Thunk
 export const fetchTodolistsTC = (): AppThunk => (dispatch) => {
