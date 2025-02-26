@@ -1,4 +1,4 @@
-import { removeTaskTC, updateTaskTC } from "../../../../../model/tasks-reducer"
+import { removeTaskTC, updateTaskTC } from "../../../../../model/tasksSlice"
 import { ChangeEvent } from "react"
 import ListItem from "@mui/material/ListItem"
 import Checkbox from "@mui/material/Checkbox"
@@ -8,7 +8,7 @@ import { getListItemSx } from "./Task.styles"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
 import { TaskStatus } from "common/enums"
 import type { DomainTask } from "../../../../../api/tasksApi.types"
-import type { DomainTodolist } from "../../../../../model/todolists-reducer"
+import type { DomainTodolist } from "../../../../../model/todolistsSlice"
 import { EditableSpan } from "common/index"
 
 type Props = {

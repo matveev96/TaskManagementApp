@@ -1,6 +1,6 @@
 import { AddItemForm } from "common/index"
-import { DomainTodolist } from "../../../model/todolists-reducer"
-import { addTaskTC } from "../../../model/tasks-reducer"
+import { DomainTodolist } from "../../../model/todolistsSlice"
+import { addTaskTC } from "../../../model/tasksSlice"
 import { TodolistTitle } from "./TodolistTitle"
 import { FilterButtons } from "./FilterButtons"
 import { Tasks } from "./Tasks"

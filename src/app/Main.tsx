@@ -1,4 +1,4 @@
-import { addTodolistTC } from "../features/todolists/model/todolists-reducer"
+import { addTodolistTC } from "../features/todolists/model/todolistsSlice"
 import Container from "@mui/material/Container"
 import Grid from "@mui/material/Grid2"
 import { AddItemForm } from "common/index"
@@ -7,8 +7,8 @@ import { useAppDispatch } from "common/hooks/useAppDispatch"
 import { useEffect } from "react"
 import { Path } from "common/routing/Routing"
 import { useAppSelector } from "common/hooks"
-import { selectIsLoggedIn } from "../features/auth/model/authSelectors"
 import { useNavigate } from "react-router"
+import { selectIsLoggedIn } from "../features/auth/model/authSlice"
 
 export const Main = () => {
   const dispatch = useAppDispatch()
@@ -36,7 +36,6 @@ export const Main = () => {
       </Grid>
       <Grid container spacing={4} sx={{ mt: "30px" }}>
         {isLoggedIn && <Todolists />}
-        {/*<Todolists />*/}
       </Grid>
     </Container>
   )

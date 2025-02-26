@@ -7,15 +7,14 @@ import FormLabel from "@mui/material/FormLabel"
 import TextField from "@mui/material/TextField"
 import { useAppDispatch, useAppSelector } from "common/hooks"
 import { getTheme } from "common/theme"
-import { selectTheme } from "../../../../app/app-selectors"
 import Grid from "@mui/material/Grid2"
 import { type SubmitHandler, useForm, Controller } from "react-hook-form"
 import type { LoginArgs } from "../../api/authApi.types"
-import { loginTC } from "../../model/authReducer"
-import { selectIsLoggedIn } from "../../model/authSelectors"
+import { loginTC, selectIsLoggedIn } from "../../model/authSlice"
 import { useNavigate } from "react-router"
 import { useEffect } from "react"
 import { Path } from "common/routing/Routing"
+import { selectTheme } from "../../../../app/appSlice"
 
 export const Login = () => {
   const dispatch = useAppDispatch()

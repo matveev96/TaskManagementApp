@@ -1,10 +1,10 @@
 import { useAppSelector } from "common/hooks/useAppSelector"
-import { selectTasks } from "../../../../model/tasks-selectors"
 import List from "@mui/material/List"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
-import { DomainTodolist } from "../../../../model/todolists-reducer"
+import { DomainTodolist } from "../../../../model/todolistsSlice"
 import { Task } from "./Task"
 import { TaskStatus } from "common/enums"
+import { selectTasks } from "../../../../model/tasksSlice"
 
 type Props = {
   todolist: DomainTodolist
