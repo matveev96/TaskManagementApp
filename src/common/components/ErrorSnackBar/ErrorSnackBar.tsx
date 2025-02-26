@@ -2,8 +2,7 @@ import { SyntheticEvent } from "react"
 import Alert from "@mui/material/Alert"
 import Snackbar from "@mui/material/Snackbar"
 import { useAppDispatch, useAppSelector } from "common/hooks"
-import { setAppErrorAC } from "../../../app/app-reducer"
-import { selectError } from "../../../app/app-selectors"
+import { selectError, setAppError } from "../../../app/appSlice"
 
 export const ErrorSnackBar = () => {
   const dispatch = useAppDispatch()
@@ -13,7 +12,7 @@ export const ErrorSnackBar = () => {
     if (reason === "clickaway") {
       return
     }
-    dispatch(setAppErrorAC(null))
+    dispatch(setAppError({ error: null }))
   }
 
   return (
