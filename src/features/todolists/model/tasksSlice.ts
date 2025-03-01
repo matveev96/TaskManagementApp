@@ -1,6 +1,6 @@
 import type { DomainTask, UpdateTaskModel } from "../api/tasksApi.types"
 import { tasksApi } from "../api/tasksApi"
-import { type AppDispatch, type AppThunk } from "../../../app/store"
+import { type AppDispatch } from "../../../app/store"
 import { setAppStatus } from "../../../app/appSlice"
 import { ResultCode } from "common/enums"
 import { handleServerAppError } from "common/utils/handleServerAppError"
@@ -108,29 +108,27 @@ export const addTaskTC = (args: { title: string; todolistId: string }) => (dispa
     })
 }
 
-export const updateTaskTC =
-  (task: DomainTask): AppThunk =>
-  (dispatch) => {
-    const model: UpdateTaskModel = {
-      title: task.title,
-      description: task.description,
-      status: task.status,
-      priority: task.priority,
-      startDate: task.startDate,
-      deadline: task.deadline,
-    }
-    dispatch(setAppStatus({ status: "loading" }))
-    tasksApi
-      .updateTask({ taskId: task.id, todolistId: task.todoListId, model })
-      .then((res) => {
-        if (res.data.resultCode === ResultCode.Success) {
-          dispatch(updateTask({ task, model }))
-          dispatch(setAppStatus({ status: "idle" }))
-        } else {
-          handleServerAppError(res.data, dispatch)
-        }
-      })
-      .catch((error) => {
-        handleServerNetworkError(error, dispatch)
-      })
+export const updateTaskTC = (task: DomainTask) => (dispatch: AppDispatch) => {
+  const model: UpdateTaskModel = {
+    title: task.title,
+    description: task.description,
+    status: task.status,
+    priority: task.priority,
+    startDate: task.startDate,
+    deadline: task.deadline,
   }
+  dispatch(setAppStatus({ status: "loading" }))
+  tasksApi
+    .updateTask({ taskId: task.id, todolistId: task.todoListId, model })
+    .then((res) => {
+      if (res.data.resultCode === ResultCode.Success) {
+        dispatch(updateTask({ task, model }))
+        dispatch(setAppStatus({ status: "idle" }))
+      } else {
+        handleServerAppError(res.data, dispatch)
+      }
+    })
+    .catch((error) => {
+      handleServerNetworkError(error, dispatch)
+    })
+}

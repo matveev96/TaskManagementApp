@@ -1,5 +1,5 @@
 import type { Todolist } from "../api/todolistsApi.types"
-import { type AppThunk } from "../../../app/store"
+import { type AppDispatch } from "../../../app/store"
 import { todolistsApi } from "../api/todolistsApi"
 import { type RequestStatus, setAppStatus } from "../../../app/appSlice"
 import { handleServerAppError } from "common/utils/handleServerAppError"
@@ -73,7 +73,7 @@ export const {
 export const { selectTodolists } = todolistsSlice.selectors
 
 // Thunk
-export const fetchTodolistsTC = (): AppThunk => (dispatch) => {
+export const fetchTodolistsTC = () => (dispatch: AppDispatch) => {
   dispatch(setAppStatus({ status: "loading" }))
   todolistsApi
     .getTodolists()
@@ -92,62 +92,56 @@ export const fetchTodolistsTC = (): AppThunk => (dispatch) => {
     })
 }
 
-export const addTodolistTC =
-  (title: string): AppThunk =>
-  (dispatch) => {
-    dispatch(setAppStatus({ status: "loading" }))
-    todolistsApi
-      .createTodolist(title)
-      .then((res) => {
-        if (res.data.resultCode === ResultCode.Success) {
-          const todolist = res.data.data.item
-          dispatch(addTodolist({ todolist }))
-          dispatch(setAppStatus({ status: "idle" }))
-        } else {
-          handleServerAppError(res.data, dispatch)
-        }
-      })
-      .catch((error) => {
-        handleServerNetworkError(error, dispatch)
-      })
-  }
+export const addTodolistTC = (title: string) => (dispatch: AppDispatch) => {
+  dispatch(setAppStatus({ status: "loading" }))
+  todolistsApi
+    .createTodolist(title)
+    .then((res) => {
+      if (res.data.resultCode === ResultCode.Success) {
+        const todolist = res.data.data.item
+        dispatch(addTodolist({ todolist }))
+        dispatch(setAppStatus({ status: "idle" }))
+      } else {
+        handleServerAppError(res.data, dispatch)
+      }
+    })
+    .catch((error) => {
+      handleServerNetworkError(error, dispatch)
+    })
+}
 
-export const removeTodolistTC =
-  (id: string): AppThunk =>
-  (dispatch) => {
-    dispatch(setAppStatus({ status: "loading" }))
-    dispatch(changeEntityStatusTodolist({ id, entityStatus: "loading" }))
-    todolistsApi
-      .deleteTodolist(id)
-      .then((res) => {
-        if (res.data.resultCode === ResultCode.Success) {
-          dispatch(removeTodolist({ id }))
-          dispatch(setAppStatus({ status: "idle" }))
-        } else {
-          handleServerAppError(res.data, dispatch)
-        }
-      })
-      .catch((error) => {
-        handleServerNetworkError(error, dispatch)
-        dispatch(changeEntityStatusTodolist({ id, entityStatus: "failed" }))
-      })
-  }
+export const removeTodolistTC = (id: string) => (dispatch: AppDispatch) => {
+  dispatch(setAppStatus({ status: "loading" }))
+  dispatch(changeEntityStatusTodolist({ id, entityStatus: "loading" }))
+  todolistsApi
+    .deleteTodolist(id)
+    .then((res) => {
+      if (res.data.resultCode === ResultCode.Success) {
+        dispatch(removeTodolist({ id }))
+        dispatch(setAppStatus({ status: "idle" }))
+      } else {
+        handleServerAppError(res.data, dispatch)
+      }
+    })
+    .catch((error) => {
+      handleServerNetworkError(error, dispatch)
+      dispatch(changeEntityStatusTodolist({ id, entityStatus: "failed" }))
+    })
+}
 
-export const changeTodolistTitleTC =
-  (args: { id: string; title: string }): AppThunk =>
-  (dispatch) => {
-    dispatch(setAppStatus({ status: "loading" }))
-    todolistsApi
-      .updateTodolist(args)
-      .then((res) => {
-        if (res.data.resultCode === ResultCode.Success) {
-          dispatch(changeTodolistTitle({ ...args }))
-          dispatch(setAppStatus({ status: "idle" }))
-        } else {
-          handleServerAppError(res.data, dispatch)
-        }
-      })
-      .catch((error) => {
-        handleServerNetworkError(error, dispatch)
-      })
-  }
+export const changeTodolistTitleTC = (args: { id: string; title: string }) => (dispatch: AppDispatch) => {
+  dispatch(setAppStatus({ status: "loading" }))
+  todolistsApi
+    .updateTodolist(args)
+    .then((res) => {
+      if (res.data.resultCode === ResultCode.Success) {
+        dispatch(changeTodolistTitle({ ...args }))
+        dispatch(setAppStatus({ status: "idle" }))
+      } else {
+        handleServerAppError(res.data, dispatch)
+      }
+    })
+    .catch((error) => {
+      handleServerNetworkError(error, dispatch)
+    })
+}
