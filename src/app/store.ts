@@ -17,9 +17,7 @@ export const store = configureStore({
 
 // определить автоматически тип всего объекта состояния
 export type RootState = ReturnType<typeof store.getState>
-
-export type AppDispatch = ThunkDispatch<RootState, unknown, UnknownAction>
-export type AppThunk = ThunkAction<void, RootState, unknown, UnknownAction>
+export type AppDispatch = typeof store.dispatch
 
 // а это, чтобы можно было в консоли браузера обращаться к store в любой момент
 // @ts-ignore
