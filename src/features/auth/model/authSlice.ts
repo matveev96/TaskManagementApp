@@ -8,13 +8,6 @@ import { authApi } from "../api/authApi"
 import { clearData } from "../../todolists/model/todolistsSlice"
 import { createSlice } from "@reduxjs/toolkit"
 
-// type InitialStateType = typeof initialState
-//
-// const initialState = {
-//   isLoggedIn: false,
-//   isInitialized: false,
-// }
-
 export const authSlice = createSlice({
   name: "auth",
   initialState: {
