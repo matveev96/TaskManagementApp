@@ -10,11 +10,11 @@ import { getTheme } from "common/theme"
 import Grid from "@mui/material/Grid2"
 import { type SubmitHandler, useForm, Controller } from "react-hook-form"
 import type { LoginArgs } from "../../api/authApi.types"
-import { loginTC, selectIsLoggedIn } from "../../model/authSlice"
 import { useNavigate } from "react-router"
-import { useEffect } from "react"
 import { Path } from "common/routing/Routing"
-import { selectTheme } from "../../../../app/appSlice"
+import { selectIsLoggedIn, selectTheme, setIsLoggedIn } from "../../../../app/appSlice"
+import { useLoginMutation } from "../../api/authApi"
+import { ResultCode } from "common/enums"
 
 export const Login = () => {
   const dispatch = useAppDispatch()
@@ -23,12 +23,11 @@ export const Login = () => {
   const themeMode = useAppSelector(selectTheme)
   const theme = getTheme(themeMode)
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      navigate(Path.Main)
-    }
-  }, [isLoggedIn])
+  const [login] = useLoginMutation()
 
+  if (isLoggedIn) {
+    navigate(Path.Main)
+  }
   // Второй вариант реализации роутинга при логинизации <Navigate>, который выпилили из документации ReactRouter. Для использования без ошибок нужно его вставить перед return компоненты Login
   // if(isLoggedIn) {
   //   return <Navigate to={Path.Main} />
@@ -44,9 +43,16 @@ export const Login = () => {
   // { defaultValues: { email: "", password: "", rememberMe: false }}
 
   const onSubmit: SubmitHandler<LoginArgs> = (data) => {
-    dispatch(loginTC(data))
-    reset({ password: "", rememberMe: false }, { keepDirty: true })
-    // { password: "", rememberMe: false }, { keepDirty: true }
+    login(data)
+      .then((res) => {
+        if (res.data?.resultCode === ResultCode.Success) {
+          localStorage.setItem("sn-token", res.data.data.token)
+          dispatch(setIsLoggedIn({ isLoggedIn: true }))
+        }
+      })
+      .then(() => {
+        reset({ password: "", rememberMe: false }, { keepDirty: true })
+      })
   }
 
   return (
