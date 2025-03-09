@@ -1,10 +1,9 @@
-import { useAppSelector } from "common/hooks/useAppSelector"
 import List from "@mui/material/List"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
 import { DomainTodolist } from "../../../../model/todolistsSlice"
 import { Task } from "./Task"
 import { TaskStatus } from "common/enums"
-import { selectTasks } from "../../../../model/tasksSlice"
+import { useGetTasksQuery } from "../../../../api/tasksApi"
 
 type Props = {
   todolist: DomainTodolist
@@ -13,20 +12,20 @@ type Props = {
 export const Tasks = ({ todolist }: Props) => {
   const [listRef] = useAutoAnimate<HTMLUListElement>()
 
-  const tasks = useAppSelector(selectTasks)
+  const { data } = useGetTasksQuery(todolist.id)
+  let tasks = data?.items
 
   const filterOfTasks = () => {
     switch (todolist.filter) {
       case "active":
-        return tasks[todolist.id].filter((task) => task.status === TaskStatus.New)
+        return tasks?.filter((task) => task.status === TaskStatus.New)
       case "completed":
-        return tasks[todolist.id].filter((task) => task.status === TaskStatus.Completed)
+        return tasks?.filter((task) => task.status === TaskStatus.Completed)
       default:
-        return tasks[todolist.id]
+        return tasks
     }
   }
   const tasksForTodolist = filterOfTasks()
-
   return (
     <>
       {tasksForTodolist?.length === 0 ? (
