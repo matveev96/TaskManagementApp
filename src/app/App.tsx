@@ -6,37 +6,49 @@ import { ThemeProvider } from "@mui/material/styles"
 import { getTheme } from "common/theme/theme"
 import { ErrorSnackBar, Header } from "common/index"
 import { Routing } from "common/routing"
-import { useEffect } from "react"
-import { useAppDispatch } from "common/hooks"
-import { initializeTC, selectIsInitialized } from "../features/auth/model/authSlice"
+import { useEffect, useState } from "react"
+
 import { CircularProgress } from "@mui/material"
 import s from "./App.module.css"
-import { selectTheme } from "./appSlice"
+import { selectTheme, setIsLoggedIn } from "./appSlice"
+import { useMeQuery } from "../features/auth/api/authApi"
+import { ResultCode } from "common/enums"
+import { useAppDispatch } from "common/hooks"
 
 function App() {
   const themeMode = useAppSelector(selectTheme)
-  const isInitialized = useAppSelector(selectIsInitialized)
-  const theme = getTheme(themeMode)
+
+  const [isInitialized, setIsInitialized] = useState(false)
 
   const dispatch = useAppDispatch()
 
-  useEffect(() => {
-    dispatch(initializeTC())
-  }, [])
+  const { data, isLoading } = useMeQuery()
 
-  if (!isInitialized) {
-    return (
-      <div className={s.circularProgressContainer}>
-        <CircularProgress size={150} thickness={3} />
-      </div>
-    )
-  }
+  useEffect(() => {
+    if (!isLoading) {
+      if (data?.resultCode === ResultCode.Success) {
+        dispatch(setIsLoggedIn({ isLoggedIn: true }))
+      }
+      setIsInitialized(true)
+    }
+  }, [isLoading, data])
+
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={getTheme(themeMode)}>
       <CssBaseline />
-      <Header />
-      <Routing />
-      <ErrorSnackBar />
+      {isInitialized && (
+        <>
+          <Header />
+          <Routing />
+          <ErrorSnackBar />
+        </>
+      )}
+
+      {!isInitialized && (
+        <div className={s.circularProgressContainer}>
+          <CircularProgress size={150} thickness={3} />
+        </div>
+      )}
     </ThemeProvider>
   )
 }
