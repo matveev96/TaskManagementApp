@@ -1,15 +1,14 @@
-import { removeTaskTC, updateTaskTC } from "../../../../../model/tasksSlice"
 import { ChangeEvent } from "react"
 import ListItem from "@mui/material/ListItem"
 import Checkbox from "@mui/material/Checkbox"
 import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { getListItemSx } from "./Task.styles"
-import { useAppDispatch } from "common/hooks/useAppDispatch"
 import { TaskStatus } from "common/enums"
-import type { DomainTask } from "../../../../../api/tasksApi.types"
+import type { DomainTask, UpdateTaskModel } from "../../../../../api/tasksApi.types"
 import type { DomainTodolist } from "../../../../../model/todolistsSlice"
 import { EditableSpan } from "common/index"
+import { useRemoveTaskMutation, useUpdateTaskMutation } from "../../../../../api/tasksApi"
 
 type Props = {
   task: DomainTask
@@ -17,19 +16,33 @@ type Props = {
 }
 
 export const Task = ({ task, todolist }: Props) => {
-  const dispatch = useAppDispatch()
+  const [removeTask] = useRemoveTaskMutation()
+  const [updateTask] = useUpdateTaskMutation()
+
+  const modelCreator = (arg: string | number): UpdateTaskModel => {
+    return {
+      title: typeof arg === "string" ? arg : task.title,
+      description: task.description,
+      status: typeof arg === "number" ? arg : task.status,
+      priority: task.priority,
+      startDate: task.startDate,
+      deadline: task.deadline,
+    }
+  }
 
   const removeTaskHandler = () => {
-    dispatch(removeTaskTC({ taskId: task.id, todolistId: todolist.id }))
+    removeTask({ taskId: task.id, todolistId: todolist.id })
   }
 
   const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const status = e.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New
-    dispatch(updateTaskTC({ ...task, status }))
+    const model = modelCreator(status)
+    updateTask({ taskId: task.id, todolistId: todolist.id, model })
   }
 
   const changeTaskTitleHandler = (title: string) => {
-    dispatch(updateTaskTC({ ...task, title }))
+    const model = modelCreator(title)
+    updateTask({ taskId: task.id, todolistId: todolist.id, model })
   }
 
   return (
