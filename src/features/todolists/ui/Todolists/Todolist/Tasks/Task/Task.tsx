@@ -6,9 +6,11 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import { getListItemSx } from "./Task.styles"
 import { TaskStatus } from "common/enums"
 import type { DomainTask, UpdateTaskModel } from "../../../../../api/tasksApi.types"
-import type { DomainTodolist } from "../../../../../model/todolistsSlice"
 import { EditableSpan } from "common/index"
 import { useRemoveTaskMutation, useUpdateTaskMutation } from "../../../../../api/tasksApi"
+import type { DomainTodolist } from "../../../../../lib/types"
+import { useAppDispatch } from "common/hooks"
+import { updateEntityStatus } from "../../utils/updateQueryEntityStatus"
 
 type Props = {
   task: DomainTask
@@ -18,6 +20,8 @@ type Props = {
 export const Task = ({ task, todolist }: Props) => {
   const [removeTask] = useRemoveTaskMutation()
   const [updateTask] = useUpdateTaskMutation()
+
+  const dispatch = useAppDispatch()
 
   const modelCreator = (arg: string | number): UpdateTaskModel => {
     return {
@@ -31,7 +35,15 @@ export const Task = ({ task, todolist }: Props) => {
   }
 
   const removeTaskHandler = () => {
+    updateEntityStatus({ status: "loading", dispatch, id: todolist.id })
     removeTask({ taskId: task.id, todolistId: todolist.id })
+      .unwrap()
+      .then(() => {
+        updateEntityStatus({ status: "succeeded", dispatch, id: todolist.id })
+      })
+      .catch(() => {
+        updateEntityStatus({ status: "idle", dispatch, id: todolist.id })
+      })
   }
 
   const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
