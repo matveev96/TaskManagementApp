@@ -1,9 +1,10 @@
 import List from "@mui/material/List"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
-import { DomainTodolist } from "../../../../model/todolistsSlice"
 import { Task } from "./Task"
 import { TaskStatus } from "common/enums"
 import { useGetTasksQuery } from "../../../../api/tasksApi"
+import { TasksSkeleton } from "../../../skeletons/TaskSkeleton/TasksSceleton"
+import type { DomainTodolist } from "../../../../lib/types"
 
 type Props = {
   todolist: DomainTodolist
@@ -12,7 +13,7 @@ type Props = {
 export const Tasks = ({ todolist }: Props) => {
   const [listRef] = useAutoAnimate<HTMLUListElement>()
 
-  const { data } = useGetTasksQuery(todolist.id)
+  const { data, isLoading } = useGetTasksQuery(todolist.id)
   let tasks = data?.items
 
   const filterOfTasks = () => {
@@ -26,6 +27,11 @@ export const Tasks = ({ todolist }: Props) => {
     }
   }
   const tasksForTodolist = filterOfTasks()
+
+  if (isLoading) {
+    return <TasksSkeleton />
+  }
+
   return (
     <>
       {tasksForTodolist?.length === 0 ? (
