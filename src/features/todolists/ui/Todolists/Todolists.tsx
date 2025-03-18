@@ -1,10 +1,22 @@
 import Paper from "@mui/material/Paper"
 import { Todolist } from "./Todolist"
 import { useGetTodolistsQuery } from "../../api/todolistsApi"
+import { TodolistSkeleton } from "../skeletons/TodolistSkeleton/TodolistSkeleton"
 
 export const Todolists = () => {
-  const { data } = useGetTodolistsQuery()
+  const { data, isLoading } = useGetTodolistsQuery()
 
+  if (isLoading) {
+    return (
+      <>
+        {Array(3)
+          .fill(null)
+          .map((_, i) => (
+            <TodolistSkeleton key={i} />
+          ))}
+      </>
+    )
+  }
   return (
     <>
       {data?.map((el) => {
