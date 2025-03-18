@@ -1,23 +1,34 @@
 import Box from "@mui/material/Box"
-import { changeTodolistFilter, FilterValuesType, DomainTodolist } from "../../../../model/todolistsSlice"
 import Button from "@mui/material/Button"
 import { filterButtonsContainerSx } from "./FilterButtons.styles"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
+import { todolistsApi } from "../../../../api/todolistsApi"
+import type { DomainTodolist, FilterValues } from "../../../../lib/types"
 
 type Props = {
   todolist: DomainTodolist
 }
 
 export const FilterButtons = ({ todolist }: Props) => {
+  const { id, filter } = todolist
+
   const dispatch = useAppDispatch()
-  const changeTodolistFilterHandler = (filter: FilterValuesType) => {
-    dispatch(changeTodolistFilter({ id: todolist.id, filter }))
+
+  const changeTodolistFilterHandler = (filter: FilterValues) => {
+    dispatch(
+      todolistsApi.util.updateQueryData("getTodolists", undefined, (state) => {
+        const todolist = state.find((tl) => tl.id === id)
+        if (todolist) {
+          todolist.filter = filter
+        }
+      }),
+    )
   }
 
   return (
     <Box sx={filterButtonsContainerSx}>
       <Button
-        variant={todolist.filter === "all" ? "outlined" : "text"}
+        variant={filter === "all" ? "outlined" : "text"}
         onClick={() => changeTodolistFilterHandler("all")}
         color={"inherit"}
       >
@@ -25,7 +36,7 @@ export const FilterButtons = ({ todolist }: Props) => {
       </Button>
 
       <Button
-        variant={todolist.filter === "active" ? "outlined" : "text"}
+        variant={filter === "active" ? "outlined" : "text"}
         onClick={() => changeTodolistFilterHandler("active")}
         color={"primary"}
       >
@@ -33,7 +44,7 @@ export const FilterButtons = ({ todolist }: Props) => {
       </Button>
 
       <Button
-        variant={todolist.filter === "completed" ? "outlined" : "text"}
+        variant={filter === "completed" ? "outlined" : "text"}
         onClick={() => changeTodolistFilterHandler("completed")}
         color={"secondary"}
       >
