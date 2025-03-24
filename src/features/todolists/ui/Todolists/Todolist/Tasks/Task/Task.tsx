@@ -9,8 +9,6 @@ import type { DomainTask, UpdateTaskModel } from "../../../../../api/tasksApi.ty
 import { EditableSpan } from "common/index"
 import { useRemoveTaskMutation, useUpdateTaskMutation } from "../../../../../api/tasksApi"
 import type { DomainTodolist } from "../../../../../lib/types"
-import { useAppDispatch } from "common/hooks"
-import { updateEntityStatus } from "../../utils/updateQueryEntityStatus"
 
 type Props = {
   task: DomainTask
@@ -20,8 +18,6 @@ type Props = {
 export const Task = ({ task, todolist }: Props) => {
   const [removeTask] = useRemoveTaskMutation()
   const [updateTask] = useUpdateTaskMutation()
-
-  const dispatch = useAppDispatch()
 
   const modelCreator = (arg: string | number): UpdateTaskModel => {
     return {
@@ -35,15 +31,7 @@ export const Task = ({ task, todolist }: Props) => {
   }
 
   const removeTaskHandler = () => {
-    updateEntityStatus({ status: "loading", dispatch, id: todolist.id })
     removeTask({ taskId: task.id, todolistId: todolist.id })
-      .unwrap()
-      .then(() => {
-        updateEntityStatus({ status: "succeeded", dispatch, id: todolist.id })
-      })
-      .catch(() => {
-        updateEntityStatus({ status: "idle", dispatch, id: todolist.id })
-      })
   }
 
   const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -65,15 +53,10 @@ export const Task = ({ task, todolist }: Props) => {
           color={"primary"}
           size={"small"}
           onChange={changeTaskStatusHandler}
-          disabled={todolist.entityStatus === "loading"}
         />
-        <EditableSpan
-          disabled={todolist.entityStatus === "loading"}
-          oldTitle={task.title}
-          onClick={(updateTitle: string) => changeTaskTitleHandler(updateTitle)}
-        />
+        <EditableSpan oldTitle={task.title} onClick={(updateTitle: string) => changeTaskTitleHandler(updateTitle)} />
       </div>
-      <IconButton disabled={todolist.entityStatus === "loading"} onClick={removeTaskHandler}>
+      <IconButton onClick={removeTaskHandler}>
         <DeleteIcon fontSize="small" />
       </IconButton>
     </ListItem>
