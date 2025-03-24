@@ -3,7 +3,6 @@ import { handleError } from "common/utils/handleError"
 
 export const baseApi = createApi({
   reducerPath: "todolistsApi",
-  tagTypes: ["Todolist", "Task"],
   baseQuery: async (args, api, extraOptions) => {
     const result = await fetchBaseQuery({
       baseUrl: process.env.REACT_APP_BASE_URL,
@@ -18,4 +17,7 @@ export const baseApi = createApi({
     return result
   },
   endpoints: () => ({}),
+  tagTypes: ["Todolist", "Task"],
+  keepUnusedDataFor: 500,
+  refetchOnReconnect: true,
 })
