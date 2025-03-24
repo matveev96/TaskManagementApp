@@ -34,7 +34,7 @@ export const AddItemForm = ({ addItem, disabled }: AddItemFormPropsType) => {
   }
 
   return (
-    <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
       <TextField
         label="Enter a title"
         variant={"outlined"}
