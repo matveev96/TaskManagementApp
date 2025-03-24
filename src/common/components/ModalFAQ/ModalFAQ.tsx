@@ -6,14 +6,19 @@ import { useAppDispatch, useAppSelector } from "common/hooks"
 import { selectModalFAQ, setModalFAQ } from "../../../app/appSlice"
 import List from "@mui/material/List"
 import ListItem from "@mui/material/ListItem"
+import Button from "@mui/material/Button"
 
 const ModalFaq = () => {
   const style = {
+    display: "flex",
+    flexDirection: "column",
     position: "absolute",
+    overflow: "auto",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 800,
+    width: "80%",
+    height: "90%",
     bgcolor: "background.paper",
     border: "2px solid #000",
     boxShadow: 24,
@@ -36,6 +41,9 @@ const ModalFaq = () => {
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
+        <Button variant="outlined" onClick={changeModalFAQHandler} sx={{ width: "50px", alignSelf: "flex-end", mb: 2 }}>
+          close
+        </Button>
         <Typography id="modal-modal-title" variant="h6" component="h2">
           FAQ for Task Management App
         </Typography>
