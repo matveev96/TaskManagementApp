@@ -25,10 +25,7 @@ export const Main = () => {
       navigate(Path.Login)
     }
   }, [isLoggedIn, navigate])
-  // Второй вариант реализации роутинга при логинезации, который выпилили из документации ReactRouter. Для использования без ошибок нужно его вставить перед return компоненты Login
-  // if(isLoggedIn) {
-  //   return <Navigate to={Path.Main} />
-  // }
+
 
   return (
     <Container fixed>
