@@ -26,15 +26,23 @@ export const Main = () => {
     }
   }, [isLoggedIn, navigate])
 
-
   return (
     <Container fixed>
       {openModalFAQ && <ModalFAQ />}
-      <Grid container sx={{ mt: "30px", display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+      <Grid
+        container
+        sx={{ mt: "30px", display: "flex", flexDirection: "column", alignItems: "flex-start", fontWeight: 600 }}
+      >
         <p>Add new Todolist 🚀</p>
         <AddItemForm addItem={addTodoList} />
       </Grid>
-      <Grid container spacing={4} sx={{ mt: "30px" }}>
+      <Grid
+        container
+        spacing={4}
+        sx={{
+          m: "30px 0",
+        }}
+      >
         {isLoggedIn && <Todolists />}
       </Grid>
     </Container>
