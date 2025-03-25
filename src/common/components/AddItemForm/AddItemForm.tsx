@@ -7,9 +7,10 @@ import Box from "@mui/material/Box"
 export type AddItemFormPropsType = {
   addItem: (title: string) => void
   disabled?: boolean
+  titleForm: string
 }
 
-export const AddItemForm = ({ addItem, disabled }: AddItemFormPropsType) => {
+export const AddItemForm = ({ addItem, disabled, titleForm }: AddItemFormPropsType) => {
   const [itemTitle, setItemTitle] = useState("")
   const [error, setError] = useState<string | null>(null)
 
@@ -34,9 +35,10 @@ export const AddItemForm = ({ addItem, disabled }: AddItemFormPropsType) => {
   }
 
   return (
-    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", width: "100%" }}>
       <TextField
-        label="Enter a title"
+        sx={{ width: "100%" }}
+        label={titleForm}
         variant={"outlined"}
         error={!!error}
         helperText={error}
