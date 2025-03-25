@@ -29,18 +29,16 @@ export const Main = () => {
   return (
     <Container fixed>
       {openModalFAQ && <ModalFAQ />}
-      <Grid
-        container
-        sx={{ mt: "30px", display: "flex", flexDirection: "column", alignItems: "flex-start", fontWeight: 600 }}
-      >
+      <Grid container sx={{ mt: "30px", fontWeight: 600 }}>
         <p>Add new Todolist 🚀</p>
-        <AddItemForm addItem={addTodoList} />
+        <AddItemForm addItem={addTodoList} titleForm={"Enter todolist title"} />
       </Grid>
       <Grid
         container
         spacing={4}
         sx={{
           m: "30px 0",
+          justifyContent: "center",
         }}
       >
         {isLoggedIn && <Todolists />}
