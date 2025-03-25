@@ -52,17 +52,20 @@ export const Header = () => {
         <Box
           sx={{
             [theme.breakpoints.down(565)]: {
-              display: "none",
+              display: `${isLoggedIn ? "none" : "block"}`,
             },
+            fontWeight: "bold",
           }}
         >
           Task Management App
         </Box>
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          {isLoggedIn && <MenuButton onClick={logoutHandler}>Logout</MenuButton>}
-          <MenuButton onClick={changeModalFAQHandler}>FAQ</MenuButton>
-          <SwitchDarkMode />
-        </Box>
+        {isLoggedIn && (
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <MenuButton onClick={logoutHandler}>Logout</MenuButton>
+            <MenuButton onClick={changeModalFAQHandler}>FAQ</MenuButton>
+            <SwitchDarkMode />
+          </Box>
+        )}
       </Toolbar>
       {status === "loading" && <LinearProgress />}
     </AppBar>
