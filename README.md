@@ -4,14 +4,13 @@
 
 - TypeScript
 - React
-- Redux
+- RTK
+- RTK-Query
 - REST-API
-- Axios
-- MaterialUI
-- Jest
+- MUI
 
 ### Deploy link:
 
 https://matveev96.github.io/TaskManagementApp/
 
-![img.png](img.png)
+![img_2.png](img_2.png)
