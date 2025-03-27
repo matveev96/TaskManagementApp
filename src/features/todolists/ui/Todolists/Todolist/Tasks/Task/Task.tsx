@@ -19,14 +19,15 @@ export const Task = ({ task, todolist }: Props) => {
   const [removeTask] = useRemoveTaskMutation()
   const [updateTask] = useUpdateTaskMutation()
 
-  const modelCreator = (arg: string | number): UpdateTaskModel => {
+  const modelCreator = (changes: Partial<UpdateTaskModel>): UpdateTaskModel => {
     return {
-      title: typeof arg === "string" ? arg : task.title,
+      title: task.title,
       description: task.description,
-      status: typeof arg === "number" ? arg : task.status,
+      status: task.status,
       priority: task.priority,
       startDate: task.startDate,
       deadline: task.deadline,
+      ...changes,
     }
   }
 
@@ -36,12 +37,12 @@ export const Task = ({ task, todolist }: Props) => {
 
   const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const status = e.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New
-    const model = modelCreator(status)
+    const model = modelCreator({ status })
     updateTask({ taskId: task.id, todolistId: todolist.id, model })
   }
 
   const changeTaskTitleHandler = (title: string) => {
-    const model = modelCreator(title)
+    const model = modelCreator({ title })
     updateTask({ taskId: task.id, todolistId: todolist.id, model })
   }
 
