@@ -31,7 +31,7 @@ function App() {
       }
       setIsInitialized(true)
     }
-  }, [isLoading, data])
+  }, [isLoading, data, dispatch])
 
   return (
     <ThemeProvider theme={getTheme(themeMode)}>
